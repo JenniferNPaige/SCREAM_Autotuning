@@ -12,8 +12,13 @@
 module load conda
 conda activate ESEm_copy
 
+# SCREAM_AUTOTUNE_DATA should point at the unpacked Zenodo data deposit
+# (see ../paths.py and ../DATA.md); defaults to <repo>/data if unset.
+# export SCREAM_AUTOTUNE_DATA=/path/to/unpacked/zenodo/data
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 #run the application:
-#python /global/cfs/cdirs/e3sm/jpaige3/optimizing/run_GPsurrogate_fromsave_final_efficient.py
-python /global/cfs/cdirs/e3sm/jpaige3/optimizing/run_GPsurrogate_fromsave_final_efficient.py --seed $SLURM_ARRAY_TASK_ID --nstarts 10
+python "${SCRIPT_DIR}/run_GPsurrogate_fromsave_final_efficient.py" --seed $SLURM_ARRAY_TASK_ID --nstarts 10
 
 # this is from https://my.nersc.gov/script_generator.php

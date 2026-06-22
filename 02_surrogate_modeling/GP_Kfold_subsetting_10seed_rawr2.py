@@ -14,18 +14,25 @@ SUBSET_SIZES = [50, 75, 100, 125, 153]   # number of runs to sample per trial
 N_SEEDS      = 10                          # independent subset draws per size
 BASE_SEED    = 0                           # seeds will be BASE_SEED … BASE_SEED+N_SEEDS-1
 
-obs_filename    = '/global/cfs/cdirs/e3sm/jpaige3/ESEm/GP_Saved_Model_Data/obs_2026-03-23_12-24-55.pkl'
-GP_proj_filename = '/global/cfs/cdirs/e3sm/jpaige3/ESEm/GP_Saved_Model_Data/GP_ZRG_masked_proj_2026-03-23_12-24-55.pkl'
-save_dir        = "/global/cfs/cdirs/e3sm/jpaige3/ESEm/CV_Saved_Model_Data_masked/10seed_GP_Subsetting_raw"
-
 # ── Imports ───────────────────────────────────────────────────────────────────
 
 import os
+import sys
 import json
 import pickle
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+import paths
+
+# ── Paths (see paths.py / DATA.md for the expected data layout) ──────────────
+
+obs_filename    = str(paths.OBS_PICKLE)
+GP_proj_filename = str(paths.GP_PROJ_PICKLE)
+save_dir        = str(paths.CV_RESULTS_DIR / "10seed_GP_Subsetting_raw")
+os.makedirs(save_dir, exist_ok=True)
 
 from esem import gp_model
 from sklearn.model_selection import KFold

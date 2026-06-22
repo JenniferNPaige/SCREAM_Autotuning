@@ -21,11 +21,15 @@ Kernels evaluated
 
 # ── Imports ──────────────────────────────────────────────────────────────────
 import os
+import sys
 import json
 import pickle
 import pandas as pd
 import numpy as np
 import gpflow
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+import paths
 
 from esem import gp_model
 
@@ -97,11 +101,12 @@ def compute_metrics(y_true_norm, y_pred_norm, y_true_phys, y_pred_phys, label):
     return r2_norm, rmse_norm, r2_phys, rmse_phys, r2_norm_raw, r2_phys_raw
 
 
-# ── Paths ─────────────────────────────────────────────────────────────────────
+# ── Paths (see paths.py / DATA.md for the expected data layout) ──────────────
 
-obs_filename     = '/global/cfs/cdirs/e3sm/jpaige3/ESEm/GP_Saved_Model_Data/obs_2026-03-23_12-24-55.pkl'
-GP_proj_filename = '/global/cfs/cdirs/e3sm/jpaige3/ESEm/GP_Saved_Model_Data/GP_ZRG_masked_proj_2026-03-23_12-24-55.pkl'
-save_dir         = "/global/cfs/cdirs/e3sm/jpaige3/ESEm/CV_Saved_Model_Data_masked/10seed_GP_kernelselect_raw"
+obs_filename     = str(paths.OBS_PICKLE)
+GP_proj_filename = str(paths.GP_PROJ_PICKLE)
+save_dir         = str(paths.CV_RESULTS_DIR / "10seed_GP_kernelselect_raw")
+os.makedirs(save_dir, exist_ok=True)
 
 # ── Load pre-saved observations ───────────────────────────────────────────────
 

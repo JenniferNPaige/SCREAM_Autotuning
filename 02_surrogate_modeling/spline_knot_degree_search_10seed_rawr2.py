@@ -22,18 +22,25 @@ N_SEEDS    = 10
 BASE_SEED  = 0
 N_FOLDS    = 5
 
-GP_proj_filename = '/global/cfs/cdirs/e3sm/jpaige3/ESEm/GP_Saved_Model_Data/GP_ZRG_masked_proj_2026-03-23_12-24-55.pkl'
-save_dir         = "/global/cfs/cdirs/e3sm/jpaige3/ESEm/CV_Saved_Model_Data_masked"
-
 # ── Imports ───────────────────────────────────────────────────────────────────
 
 import os
+import sys
 import json
 import pickle
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+import paths
+
+# ── Paths (see paths.py / DATA.md for the expected data layout) ──────────────
+
+GP_proj_filename = str(paths.GP_PROJ_PICKLE)
+save_dir         = str(paths.CV_RESULTS_DIR)
+os.makedirs(save_dir, exist_ok=True)
 
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import SplineTransformer

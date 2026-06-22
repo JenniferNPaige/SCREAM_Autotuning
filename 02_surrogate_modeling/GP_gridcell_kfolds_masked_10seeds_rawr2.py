@@ -18,10 +18,14 @@ Structure:
 
 # ── Imports ───────────────────────────────────────────────────────────────────
 import os
+import sys
 import json
 import numpy as np
 import pandas as pd
 import xarray as xr
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+import paths
 
 from esem import gp_model
 
@@ -151,23 +155,21 @@ def compute_metrics(y_true_norm, y_pred_norm, y_true_phys, y_pred_phys, label):
     return r2_norm, rmse_norm, r2_phys, rmse_phys, r2_norm_raw, r2_phys_raw
 
 
-# ── Paths ─────────────────────────────────────────────────────────────────────
+# ── Paths (see paths.py / DATA.md for the expected data layout) ──────────────
 
-params_json  = '/global/cfs/cdirs/e3sm/jpaige3/ESEm/SCREAM.2024-autocal-00.ne1024pg2-params.json'
+params_json  = str(paths.PPE_PARAMS_JSON)
 
-DY1_path     = '/global/cfs/cdirs/e3sm/jpaige3/dy1ne1024'
-DY2_path     = '/global/cfs/cdirs/e3smdata/simulations/ecp-autotune/SCREAM.2024-autocal-00.ne1024pg2/'
+DY1_path     = str(paths.DY1_DIR)
+DY2_path     = str(paths.DY2_DIR) + os.sep
 
-DY1_obs_dir  = '/global/cfs/cdirs/e3smdata/simulations/ecp-autotune/obs/'
-DY2_obs_dir  = '/global/cfs/projectdirs/e3smdata/simulations/SCREAM.2024-autocal-00.ne1024pg2/obs/'
+DY1_obs_dir  = str(paths.DY1_OBS_DIR) + os.sep
+DY2_obs_dir  = str(paths.DY2_OBS_DIR) + os.sep
 
-control_file = ('/global/cfs/projectdirs/e3smdata/simulations/ecp-autotune/'
-                'SCREAM.2024-autocal-00.ne1024pg2/m0000/SCREAM.2024-autocal-00.ne1024pg2/run/'
-                'output.scream.AutoCal.daily_avg_ne30pg2.AVERAGE.nhours_x24.2020-01-26-00000.nc')
+control_file = str(paths.CONTROL_FILE)
 
-regions_path = '/global/cfs/projectdirs/e3smdata/simulations/ecp-autotune/regions.nc'
+regions_path = str(paths.REGIONS_FILE)
 
-save_dir     = '/global/cfs/cdirs/e3sm/jpaige3/ESEm/CV_Saved_Model_Data_masked/10seeds_GP_gridcell_raw'
+save_dir     = str(paths.CV_RESULTS_DIR / "10seeds_GP_gridcell_raw")
 os.makedirs(os.path.join(save_dir, 'GP'), exist_ok=True)
 
 

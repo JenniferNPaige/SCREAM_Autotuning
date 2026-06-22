@@ -1,9 +1,14 @@
 import os
+import sys
 import pandas as pd
 import numpy as np
 import xarray as xr
 import glob
 import pickle
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+import paths
+
 from esem import gp_model
 
 from sklearn.metrics import root_mean_squared_error as rmse
@@ -40,21 +45,21 @@ costname = 'default' #call cost function without '_cost_fun'
 
 #----------------------------------------------------------------------------------------------------
 
-cost_function_path =  f"/global/cfs/cdirs/e3sm/jpaige3/optimizing/cost_functions/{costname}_cost_fun.py"
+cost_function_path = str(paths.COST_FUNCTIONS_DIR / f"{costname}_cost_fun.py")
 spec = importlib.util.spec_from_file_location("cost_function", cost_function_path)
 cost_function = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(cost_function)
 
-regions_file = xr.open_dataset('/global/cfs/projectdirs/e3smdata/simulations/ecp-autotune/regions.nc')
+regions_file = xr.open_dataset(str(paths.REGIONS_FILE))
 regions_list = ['poles','extratropical_land','extratropical_ocean','tropical_land','ascending_tropical_ocean','descending_tropical_ocean']
 #area = ppe_dataset.area[1,:] #only taking the first row, because all rows should have the same values
-control = xr.open_dataset('/global/cfs/projectdirs/e3smdata/simulations/ecp-autotune/SCREAM.2024-autocal-00.ne1024pg2/m0000/SCREAM.2024-autocal-00.ne1024pg2/run/output.scream.AutoCal.daily_avg_ne30pg2.AVERAGE.nhours_x24.2020-01-26-00000.nc')
+control = xr.open_dataset(str(paths.CONTROL_FILE))
 area = control.variables['area'][:]
 lat = control.variables['lat'][:]
 lon = control.variables['lon'][:]
 
-# Load back GP proj
-GP_proj_filename = '/global/cfs/cdirs/e3sm/jpaige3/ESEm/GP_Saved_Model_Data/GP_ZRG_masked_proj_2026-03-23_12-24-55.pkl' #has masks properly implimented, norms to full parameter ranges, and 3 zones removed for DY1 and DY2
+# Load back GP proj (has masks properly implemented, norms to full parameter ranges, and 3 zones removed for DY1 and DY2)
+GP_proj_filename = str(paths.GP_PROJ_PICKLE)
 
 with open(GP_proj_filename, 'rb') as f:
     loaded = pickle.load(f)
@@ -84,7 +89,7 @@ OLR_train = loaded['OLR_train']
 print(X_train_norm.shape, Y_train_norm.shape)
 
 #Load back obs
-obs_filename = '/global/cfs/cdirs/e3sm/jpaige3/ESEm/GP_Saved_Model_Data/obs_2026-03-23_12-24-55.pkl'
+obs_filename = str(paths.OBS_PICKLE)
 
 with open(obs_filename, 'rb') as f:
     loaded_obs = pickle.load(f)
@@ -256,7 +261,9 @@ with ThreadPoolExecutor() as executor:
 
     # Save results
     date_str = datetime.now().strftime("%Y-%m-%d")
-    csv_filename = f"/global/cfs/cdirs/e3sm/jpaige3/optimizing/Optimizing_results/{costname}_cost_fun/results{N_xstarts}_{seed}_{date_str}_{costname}.csv"
+    results_subdir = paths.OPT_RESULTS_DIR / f"{costname}_cost_fun"
+    results_subdir.mkdir(parents=True, exist_ok=True)
+    csv_filename = str(results_subdir / f"results{N_xstarts}_{seed}_{date_str}_{costname}.csv")
     # Save as CSV
     with open(csv_filename, "w", newline="") as f_csv:
         writer = csv.writer(f_csv)
