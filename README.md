@@ -84,3 +84,7 @@ This repository itself is archived on Zenodo via GitHub's release integration â€
 ## License
 
 Code is released under the MIT License â€” see [LICENSE](LICENSE).
+
+## Related work
+
+See [rebassoo/autotune](https://github.com/rebassoo/autotune) for a modified, maintained version of this workflow.
