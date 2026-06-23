@@ -35,7 +35,6 @@ Implements the surrogate comparison in Sec. 4 and the appendix sensitivity studi
 - `GP_gridcell_kfolds_masked_10seeds_rawr2.py` — ZRG-trained vs. native-grid-cell-trained GP comparison (Table A1–A2); ZRG training is selected as marginally more skillful.
 - `GP_kernel_comparison_Kfolds_masked_10seeds_rawr2.py` — compares GP kernels: RBF, Matérn 1/2, 3/2, 5/2, rational quadratic, linear, and combinations, against the ESEm default RBF+linear+polynomial kernel (Table A3).
 - `spline_knot_degree_search_10seed_rawr2.py` — hyperparameter search over spline knot count/degree (Table A4); 3 knots, degree 2 is selected.
-- `Final_Surrogate_Optimizing_Visualizing.ipynb` — earlier version of the optimization/visualization notebook in `03_optimization/`, kept for reference.
 
 ### 03_optimization
 Implements Sec. 5 (cost function definition and optimization).
