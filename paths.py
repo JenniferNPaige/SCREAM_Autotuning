@@ -73,6 +73,12 @@ OPT_RESULTS_DIR = DATA_ROOT / "optimization_results"
 # --- Evaluation simulations (Sec. 6, App. B) --------------------------------
 EVAL_SIM_DIR = DATA_ROOT / "evaluation_simulations"
 
+# 2nd-day-average default/optimal runs (item 4 in DATA.md), per DYAMOND period
+DY1_DEFAULT_RUN_DIR = EVAL_SIM_DIR / "dy1" / "default"
+DY1_OPTIMAL_RUN_DIR = EVAL_SIM_DIR / "dy1" / "optimal"
+DY2_DEFAULT_RUN_DIR = EVAL_SIM_DIR / "dy2" / "default"
+DY2_OPTIMAL_RUN_DIR = EVAL_SIM_DIR / "dy2" / "optimal"
+
 # --- Figure/plot output (not part of the Zenodo data deposit) --------------
 FIGURES_DIR = OUTPUT_ROOT / "figures"
 
