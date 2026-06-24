@@ -10,7 +10,7 @@ in DATA.md.
 
     export SCREAM_AUTOTUNE_DATA=/path/to/unpacked/zenodo/data
 
-Directory layout expected under SCREAM_AUTOTUNE_DATA (see DATA.md):
+Directory layout expected under SCREAM_AUTOTUNE_DATA:
 
     ppe_raw/dy1/                     per-member DYAMOND1 (summer) PPE output
     ppe_raw/dy2/                     per-member DYAMOND2 (winter) PPE output
