@@ -2,6 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite the associated paper."
 title: "SCREAM_Autotuning: Machine Learning for Optimized Tuning of the Simple Cloud-Resolving Earth Atmosphere Model (SCREAM)"
 type: software
+license: MIT
 authors:
   - given-names: Jennifer
     family-names: Paige
@@ -21,20 +22,26 @@ authors:
   - given-names: Naser
     family-names: Mahfouz
     affiliation: "Pacific Northwest National Laboratory"
+  - given-names: Noel
+    family-names: Keen
+    affiliation: "Lawrence Berkeley National Laboratory"
+  - given-names: Gregory S.
+    family-names: Elsaesser
+    affiliation: "Columbia University / NASA Goddard Institute for Space Studies"
   - given-names: Luca
     family-names: Bertagna
     affiliation: "Sandia National Laboratories"
   - given-names: Peter
     family-names: Bogenschutz
     affiliation: "Lawrence Livermore National Laboratory"
-  - given-names: Andrew
-    family-names: Bradley
-    affiliation: "Sandia National Laboratories"
   - given-names: Gavin
     family-names: Collins
     affiliation: "Sandia National Laboratories"
   - given-names: Aaron
     family-names: Donahue
+    affiliation: "Lawrence Livermore National Laboratory"
+  - given-names: Chris
+    family-names: Golaz
     affiliation: "Lawrence Livermore National Laboratory"
   - given-names: Oksana
     family-names: Guba
@@ -42,9 +49,6 @@ authors:
   - given-names: Ben
     family-names: Hillman
     affiliation: "Sandia National Laboratories"
-  - given-names: Noel
-    family-names: Keen
-    affiliation: "Lawrence Berkeley National Laboratory"
   - given-names: Jungmin
     family-names: Lee
     affiliation: "Lawrence Livermore National Laboratory"
@@ -84,22 +88,24 @@ preferred-citation:
       family-names: Rebassoo
     - given-names: Naser
       family-names: Mahfouz
+    - given-names: Noel
+      family-names: Keen
+    - given-names: Gregory S.
+      family-names: Elsaesser
     - given-names: Luca
       family-names: Bertagna
     - given-names: Peter
       family-names: Bogenschutz
-    - given-names: Andrew
-      family-names: Bradley
     - given-names: Gavin
       family-names: Collins
     - given-names: Aaron
       family-names: Donahue
+    - given-names: Chris
+      family-names: Golaz
     - given-names: Oksana
       family-names: Guba
     - given-names: Ben
       family-names: Hillman
-    - given-names: Noel
-      family-names: Keen
     - given-names: Jungmin
       family-names: Lee
     - given-names: Wuyin

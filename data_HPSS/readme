@@ -1,0 +1,24 @@
+HPSS is a long-term archive system. Learn more about it here.
+https://docs.nersc.gov/filesystems/archive/.
+
+Under the following path, we stored the experiments listed below.
+Public link: https://portal.nersc.gov/archive/home/j/jpaige3/www/SCREAM-autotuning/
+System path: /home/j/jpaige3/www/SCREAM-autotuning/
+
+Note that you may have to unzip/untar some of the folders before using. Please also note that it make take several minutes to load and download.
+
+PPE Simulations (DY1):
+----------------------
+
+
+PPE Simulations (DY2):
+----------------------
+
+
+2-day Optimal Simulations (DY1, DY2):
+-------------------------------------
+
+
+35-day Optimal and Default Simulations (DY2):
+---------------------------------------------
+

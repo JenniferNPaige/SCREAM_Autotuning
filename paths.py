@@ -1,31 +1,44 @@
 """
 Central data-path configuration for the SCREAM_Autotuning pipeline.
 
-All scripts/notebooks import paths from here instead of hardcoding
-HPC-specific absolute paths (e.g. /global/cfs/cdirs/...). Set the
-SCREAM_AUTOTUNE_DATA environment variable to point at wherever the
-companion Zenodo data deposit has been unpacked; it defaults to a
-`data/` directory next to this file, matching the layout described
-in DATA.md.
+Data is split across two sources:
 
-    export SCREAM_AUTOTUNE_DATA=/path/to/unpacked/zenodo/data
+1. **Zenodo deposit** (data_Zenodo/ in this repo, excluded from git):
+   Small derived artifacts — ZRG training tables, CV outputs, optimization CSVs,
+   40-day simulation pickles, observational masks/regions, and ppe_params.json.
+   Set SCREAM_AUTOTUNE_ZENODO to point at the unpacked Zenodo deposit; defaults
+   to data_Zenodo/ next to this file.
 
-Directory layout expected under SCREAM_AUTOTUNE_DATA (see DATA.md):
+       export SCREAM_AUTOTUNE_ZENODO=/path/to/unpacked/zenodo/deposit
 
-    ppe_raw/dy1/                     per-member DYAMOND1 (summer) PPE output
-    ppe_raw/dy2/                     per-member DYAMOND2 (winter) PPE output
+2. **NERSC HPSS archive** (data_HPSS/ in this repo contains only a readme):
+   Raw PPE output, 2-day default/optimal evaluation runs, and 35-day simulations
+   stored on NERSC tape archive.
+   Public portal: https://portal.nersc.gov/archive/home/j/jpaige3/www/SCREAM-autotuning/
+   See data_HPSS/readme for the system path and archive layout.
+   Set SCREAM_AUTOTUNE_HPSS to the local mount path; defaults to data_HPSS/
+   (which on your local machine contains only the readme).
+
+       export SCREAM_AUTOTUNE_HPSS=/path/to/hpss/mount   # e.g. on NERSC
+
+Directory layout under SCREAM_AUTOTUNE_ZENODO:
+
     ppe_raw/ppe_params.json          tunable-parameter values per ensemble member
     observations/dy1/, dy2/          IMERG/CERES-SYN/MAC observational files
-    observations/era5/               ERA5 reference fields for untuned variables
-    observations/regions.nc          zonal/regional/global area definitions (Table 3)
-    masks/                           observational-coverage masks
-    zrg_training_tables/             pickled ZRG tables (obs + GP projections; Sec. 3.4, 4.2)
-    cv_results/                      K-fold cross-validation outputs (Sec. 4, App. A)
-    optimization_results/            per-cost-function basinhopping results (Sec. 5)
-    evaluation_simulations/          2-day and 35-day default/optimal SCREAM runs (Sec. 6)
+    observations/era5/               ERA5 regridded fields (WVP, T, U, omega)
+    observations/regions.nc          zonal/regional/global area definitions
+    observations/masks/              observational-coverage masks
+    zrg_training_tables/             pickled ZRG tables (obs + GP projections)
+    cv_results/                      K-fold cross-validation outputs
+    optimization_results/            per-cost-function basinhopping CSVs
+    evaluation_simulations/          40-day simulation pickles
 
-Outputs (figures, etc.) are written under SCREAM_AUTOTUNE_OUTPUT,
-defaulting to an `outputs/` directory next to this file.
+Directory layout under SCREAM_AUTOTUNE_HPSS:
+
+    dy1/                  PPE DY1 members (dy1/m0000 … dy1/m0152) + dy1/optimal/
+    dy2/                  PPE DY2 members (dy2/m0000 … dy2/m0152) + dy2/optimal/
+    default_40days/       35-day default-parameter DYAMOND2 simulation
+    opt_mar_26_40days/    35-day optimal-parameter DYAMOND2 simulation
 """
 
 import os
@@ -33,57 +46,63 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
 
-DATA_ROOT = Path(os.environ.get("SCREAM_AUTOTUNE_DATA", REPO_ROOT / "data"))
-OUTPUT_ROOT = Path(os.environ.get("SCREAM_AUTOTUNE_OUTPUT", REPO_ROOT / "outputs"))
+ZENODO_ROOT = Path(os.environ.get("SCREAM_AUTOTUNE_ZENODO", REPO_ROOT / "data_Zenodo"))
+HPSS_ROOT   = Path(os.environ.get("SCREAM_AUTOTUNE_HPSS",   REPO_ROOT / "data_HPSS"))
+OUTPUT_ROOT = Path(os.environ.get("SCREAM_AUTOTUNE_OUTPUT",  REPO_ROOT / "outputs"))
 
-# --- PPE raw simulation output (Sec. 3) -------------------------------------
-PPE_RAW_DIR = DATA_ROOT / "ppe_raw"
-DY1_DIR = PPE_RAW_DIR / "dy1"
-DY2_DIR = PPE_RAW_DIR / "dy2"
-PPE_PARAMS_JSON = PPE_RAW_DIR / "ppe_params.json"
+# --- Zenodo: PPE parameter table (Sec. 3.1, Table 1) -----------------------
+PPE_PARAMS_JSON = ZENODO_ROOT / "ppe_raw" / "ppe_params.json"
 
-# --- Observations (Table 2) and region definitions (Table 3) ---------------
-OBS_DIR = DATA_ROOT / "observations"
-DY1_OBS_DIR = OBS_DIR / "dy1"
-DY2_OBS_DIR = OBS_DIR / "dy2"
-ERA5_DIR = OBS_DIR / "era5"
+# --- Zenodo: Observations and region definitions (Table 2–3) ---------------
+OBS_DIR      = ZENODO_ROOT / "observations"
+DY1_OBS_DIR  = OBS_DIR / "dy1"
+DY2_OBS_DIR  = OBS_DIR / "dy2"
+ERA5_DIR     = OBS_DIR / "era5"      # ERA5 regridded fields (WVP, T, U, omega)
 REGIONS_FILE = OBS_DIR / "regions.nc"
-MASK_DIR = DATA_ROOT / "masks"
+MASK_DIR     = OBS_DIR / "masks"
 
-# --- Default-parameter control simulation (used as a baseline in several
-#     notebooks for regridding/region info) ---------------------------------
+# --- Zenodo: Preprocessed ZRG training tables (Sec. 3.4, 4.2) -------------
+ZRG_DIR        = ZENODO_ROOT / "zrg_training_tables"
+OBS_PICKLE     = ZRG_DIR / "obs.pkl"
+GP_PROJ_PICKLE = ZRG_DIR / "GP_ZRG_masked_proj.pkl"
+
+# --- Zenodo: Cross-validation outputs (Sec. 4, App. A) --------------------
+CV_RESULTS_DIR = ZENODO_ROOT / "cv_results"
+
+# --- Zenodo: Optimization (Sec. 5) -----------------------------------------
+COST_FUNCTIONS_DIR = REPO_ROOT / "03_optimization" / "cost_functions"
+OPT_RESULTS_DIR    = ZENODO_ROOT / "optimization_results"
+
+# --- Zenodo: 35-day simulation pickles (Sec. 6.1, App. B4) ----------------
+EVAL_SIM_DIR              = ZENODO_ROOT / "evaluation_simulations"
+EVAL_40DAY_TS_PICKLE      = EVAL_SIM_DIR / "40daysim_timeseries.pkl"
+EVAL_40DAY_MONTHLY_PICKLE = EVAL_SIM_DIR / "40daysim_monthlymean.pkl"
+EVAL_40DAY_OBS_PICKLE     = EVAL_SIM_DIR / "40daysim_obs.pkl"
+
+# --- HPSS: PPE raw simulation output (Sec. 3) ------------------------------
+# See data_HPSS/readme for archive layout and public portal link.
+DY1_DIR = HPSS_ROOT / "dy1"    # 153 PPE members: dy1/m0000 … dy1/m0152
+DY2_DIR = HPSS_ROOT / "dy2"    # 153 PPE members: dy2/m0000 … dy2/m0152
+
+# Control (member 0) used as baseline and for grid/region metadata
 CONTROL_FILE = (
-    DY2_DIR
-    / "m0000"
+    DY2_DIR / "m0000"
     / "output.scream.AutoCal.daily_avg_ne30pg2.AVERAGE.nhours_x24.2020-01-26-00000.nc"
 )
 
-# --- Preprocessed ZRG training tables (Sec. 3.4, 4.2) -----------------------
-ZRG_DIR = DATA_ROOT / "zrg_training_tables"
-OBS_PICKLE = ZRG_DIR / "obs.pkl"
-GP_PROJ_PICKLE = ZRG_DIR / "GP_ZRG_masked_proj.pkl"
+# --- HPSS: 2-day default/optimal evaluation runs (Sec. 6) -----------------
+DY1_OPTIMAL_RUN_DIR = DY1_DIR / "optimal"
+DY2_OPTIMAL_RUN_DIR = DY2_DIR / "optimal"
 
-# --- Cross-validation outputs (Sec. 4, App. A) ------------------------------
-CV_RESULTS_DIR = DATA_ROOT / "cv_results"
+# --- HPSS: 35-day DYAMOND2 evaluation simulations (Sec. 6.1) --------------
+EVAL_40DAY_CTL_DIR = HPSS_ROOT / "default_40days"
+EVAL_40DAY_OPT_DIR = HPSS_ROOT / "opt_mar_26_40days"
 
-# --- Optimization (Sec. 5) ---------------------------------------------------
-COST_FUNCTIONS_DIR = REPO_ROOT / "03_optimization" / "cost_functions"
-OPT_RESULTS_DIR = DATA_ROOT / "optimization_results"
-
-# --- Evaluation simulations (Sec. 6, App. B) --------------------------------
-EVAL_SIM_DIR = DATA_ROOT / "evaluation_simulations"
-
-# 2nd-day-average default/optimal runs (item 4 in DATA.md), per DYAMOND period
-DY1_DEFAULT_RUN_DIR = EVAL_SIM_DIR / "dy1" / "default"
-DY1_OPTIMAL_RUN_DIR = EVAL_SIM_DIR / "dy1" / "optimal"
-DY2_DEFAULT_RUN_DIR = EVAL_SIM_DIR / "dy2" / "default"
-DY2_OPTIMAL_RUN_DIR = EVAL_SIM_DIR / "dy2" / "optimal"
-
-# --- Figure/plot output (not part of the Zenodo data deposit) --------------
+# --- Figure/plot output (not part of either data deposit) ------------------
 FIGURES_DIR = OUTPUT_ROOT / "figures"
 
 
 def ensure_output_dirs():
-    """Create the output directories this pipeline writes into, if missing."""
+    """Create output directories this pipeline writes into, if missing."""
     for d in (CV_RESULTS_DIR, OPT_RESULTS_DIR, FIGURES_DIR):
         d.mkdir(parents=True, exist_ok=True)
