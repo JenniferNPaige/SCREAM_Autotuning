@@ -1,17 +1,14 @@
 # SCREAM_Autotuning
 
-Code accompanying **"Machine Learning for Optimized Tuning of the Simple Cloud-Resolving Earth Atmosphere Model (SCREAM)"** (Paige et al., *Journal of Advances in Modeling Earth Systems*, in review).
+Code accompanying **"Machine Learning for Optimized Tuning of the Simple Cloud-Resolving Earth Atmosphere Model (SCREAM)"** (Paige et al., submitted to *Journal of Advances in Modeling Earth Systems*).
 
 ## Summary
 
 Global storm-resolving models (GSRMs) like SCREAM are too computationally expensive to tune by hand or with long simulations. This repository implements an automated tuning framework for SCREAM:
 
-1. A **153-member perturbed parameter ensemble (PPE)** of 2-day SCREAM simulations (DYAMOND1 summer and DYAMOND2 winter cases) is run, varying 16 SHOC/P3 parameters via Latin hypercube sampling, and output is averaged to zonal/regional/global (ZRG) values.
-2. Several **machine-learning surrogate models** (Gaussian process, CNN, random forest, multiple linear regression, spline regression) are trained on the PPE to emulate SCREAM's response (PCP, OSR, OLR, TLWP) to parameter changes; the GP surrogate is most skillful under this data-limited regime.
-3. The GP surrogate is used to **optimize** SCREAM's parameters by minimizing a weighted cost function (bias relative to observations, aggregated across variables/regions/seasons) via SciPy basinhopping.
-4. The optimized parameters are **evaluated** in real SCREAM simulations (2-day and a 35-day DYAMOND2 run) against the default tuning and observations, including variables not used in tuning.
-
-Key result: the optimized tuning reduces 2-day bias by >20% in tuned variables and improves several untuned variables (notably the mid-level dry bias), but some improvements degrade in the 35-day evaluation — short-simulation autotuning is a useful step but not sufficient by itself for final GSRM tuning.
+1. An ensemble of 2-day simulations was used for the automated tuning of a global storm resolving model.
+2. A Gaussian process surrogate outperformed convolutional neural network and random forest surrogates in predicting Earth system model responses to parameter perturbations, when trained under the data-limited conditions characteristic of high resolution autotuning.
+3. In 2-day validation simulations, runs with optimized parameters showed marked improvement relative to the default tuning—specifically reducing a known midlevel dry bias and producing more realistic cloud properties while maintaining a similar radiative balance; dry bias improvements remain in 35-day simulations while other improvements degrade.
 
 ## Repository structure
 
@@ -78,4 +75,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## Related work
 
-[rebassoo/autotune](https://github.com/rebassoo/autotune) — a modified, actively maintained version of this workflow.
+[rebassoo/autotune](https://github.com/rebassoo/autotune) — a modified, maintained version of this workflow.
