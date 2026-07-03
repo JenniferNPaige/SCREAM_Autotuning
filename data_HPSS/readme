@@ -9,21 +9,21 @@ Note that you may have to unzip/untar some of the folders before using. Please a
 
 PPE Simulations (DY1):
 ----------------------
-/home/j/jpaige3/SCREAM-autotuning/www/dy1/
+/home/j/jpaige3/SCREAM-autotuning/www/dy1/dy1_ppe_data/SCREAM.2024-autocal-00.ne1024pg2
 
 PPE Simulations (DY2):
 ----------------------
-/home/j/jpaige3/SCREAM-autotuning/www/dy2/
+/home/j/jpaige3/SCREAM-autotuning/www/dy2/dy2_ppe_data/SCREAM.2024-autocal-00.ne1024pg2
 
 2-day Optimal Simulations (DY1, DY2):
 -------------------------------------
-/home/j/jpaige3/SCREAM-autotuning/www/dy1/optimal
-/home/j/jpaige3/SCREAM-autotuning/www/dy2/optimal
+/home/j/jpaige3/SCREAM-autotuning/www/dy1/optimal/SCREAM.2024-autocal-00.ne1024pg2
+/home/j/jpaige3/SCREAM-autotuning/www/dy2/optimal/SCREAM.2024-autocal-00.ne1024pg2
 
 
 35-day Optimal and Default Simulations (DY2):
 ---------------------------------------------
-/home/j/jpaige3/SCREAM-autotuning/www/default_40days/
-/home/j/jpaige3/SCREAM-autotuning/www/opt_mar_26_40days/
+/home/j/jpaige3/SCREAM-autotuning/www/default_40days/SCREAM.2024-autocal-00.ne1024pg2
+/home/j/jpaige3/SCREAM-autotuning/www/opt_mar_26_40days/SCREAM.2024-autocal-00.ne1024pg2
 
 
