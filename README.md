@@ -20,6 +20,7 @@ Global storm-resolving models (GSRMs) like SCREAM are too computationally expens
 04_simulation_evaluation/   Evaluate optimized vs. default simulations (Sec. 6, App. B)
 paths.py                    Central data-path configuration (see DATA.md)
 environment.yml             Conda environment
+environment_mapping.yml     Conda environment used in evaluation mapping
 ```
 
 ### 01_data_preprocessing
